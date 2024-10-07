@@ -1,0 +1,30 @@
+{
+    "name": "EasyCopyTabLink",
+    "description": "I wanna copy URL with title",
+    "version": "1.10",
+    "manifest_version": 3,
+    "optional_permissions": [
+        "tabs"
+    ],
+    "permissions": [
+        "activeTab",
+        "clipboardWrite",
+        "scripting",
+        "offscreen"
+    ],
+    "action": {
+        "default_icon": {
+            "16": "images/coding16.png",
+            "48": "images/coding48.png",
+            "128": "images/coding128.png"
+        }
+    },
+    "icons": {
+        "16": "images/coding16.png",
+        "48": "images/coding48.png",
+        "128": "images/coding128.png"
+    },
+    "background": {
+        "service_worker": "background.js"
+    }
+}
