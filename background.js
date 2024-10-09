@@ -1,16 +1,18 @@
 // When the browser action is clicked, `addToClipboard()` will use an offscreen
 // document to write the value of `textToCopy` to the system clipboard.
 chrome.action.onClicked.addListener(async () => {
-  chrome.tabs.query(
-    { active: true, currentWindow: true },
-    async function (tabs) {
-      let activeTab = tabs[0];
-      let tabUrl = activeTab.url;
-      let tabTitle = activeTab.title;
-      const link = `<a href="${tabUrl}">${tabTitle}</a>`      
-      await addToClipboard(link);
-    }
-  );
+  setTimeout(() => {
+    chrome.tabs.query(
+      { active: true, currentWindow: true },
+      async function (tabs) {
+        let activeTab = tabs[0];
+        let tabUrl = activeTab.url;
+        let tabTitle = activeTab.title;
+        const link = `<a href="${tabUrl}">${tabTitle}</a>`      
+        await addToClipboard(link);
+      }
+    );
+  }, 200); // 200ms delay to ensure active tab is properly updated
 });
 
 async function addToClipboard(value) {

@@ -2,11 +2,9 @@
     "name": "EasyCopyTabLink",
     "description": "I wanna copy URL with title",
     "version": "1.10",
-    "manifest_version": 3,
-    "optional_permissions": [
-        "tabs"
-    ],
+    "manifest_version": 3,    
     "permissions": [
+        "tabs",
         "activeTab",
         "clipboardWrite",
         "scripting",
