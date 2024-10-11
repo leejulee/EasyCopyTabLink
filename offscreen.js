@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(handleMessages);
 // This function performs basic filtering and error checking on messages before
 // dispatching the
 // message to a more specific message handler.
-async function handleMessages(message, _sender, sendResponse) {
+function handleMessages(message, _sender, sendResponse) {
   // Return early if this message isn't meant for the offscreen document.
   if (message.target !== "c") {
     sendResponse(false);
@@ -25,7 +25,21 @@ async function handleMessages(message, _sender, sendResponse) {
   sendResponse(true);
 }
 
-async function handleClipboardWriteV2(data) {  
+let timeoutID;
+
+// Job's done! Close the offscreen document.
+function setCloseWindow() {
+  let timeoutSec = 5 * 1000;
+
+  clearTimeout(timeoutID);
+  timeoutID = setTimeout(function () {
+    window.close();
+  }, timeoutSec);
+}
+
+function handleClipboardWriteV2(data) {    
+  setCloseWindow();
+
   try {
     const regex = /href="([^"]+)">([^<]+)/;
     const match = data.match(regex);
@@ -47,9 +61,5 @@ async function handleClipboardWriteV2(data) {
     document.oncopy = oncopyOriginal;
 
   } finally {    
-    // Job's done! Close the offscreen document.
-    window.close();
   }
 }
-
-

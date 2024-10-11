@@ -1,7 +1,6 @@
 // When the browser action is clicked, `addToClipboard()` will use an offscreen
 // document to write the value of `textToCopy` to the system clipboard.
-chrome.action.onClicked.addListener(async () => {
-  setTimeout(() => {
+chrome.action.onClicked.addListener(async () => {  
     chrome.tabs.query(
       { active: true, currentWindow: true },
       async function (tabs) {
@@ -11,16 +10,25 @@ chrome.action.onClicked.addListener(async () => {
         const link = `<a href="${tabUrl}">${tabTitle}</a>`      
         await addToClipboard(link);
       }
-    );
-  }, 200); // 200ms delay to ensure active tab is properly updated
+    );  
 });
 
 async function addToClipboard(value) {
-  await chrome.offscreen.createDocument({
-    url: "offscreen.html",
-    reasons: [chrome.offscreen.Reason.CLIPBOARD],
-    justification: "Write text to the clipboard.",
-  });
+  const e = chrome.runtime.getURL("offscreen.html");
+  
+  let exists = (await chrome.runtime.getContexts({
+    contextTypes: ["OFFSCREEN_DOCUMENT"],
+    documentUrls: [e],
+  })
+  ).length > 0
+
+  if(!exists){
+    await chrome.offscreen.createDocument({
+      url: "offscreen.html",
+      reasons: [chrome.offscreen.Reason.CLIPBOARD],
+      justification: "Write text to the clipboard.",
+    });
+  }  
 
   // Now that we have an offscreen document, we can dispatch the
   // message.
